@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
 use Illuminate\Support\Facades\DB;
+use Psy\Readline\Hoa\Protocol;
 
 class ProyectoController extends Controller
 {
@@ -18,7 +19,7 @@ class ProyectoController extends Controller
        ->select('projects.*', 'users.name as nombre_user')
        ->get();
 
-       return view('/dashboard', ['proyectos' => $proyectos]);
+       return view('proyectos.index', ['proyectos' => $proyectos]);
     }
 
     /**
@@ -26,7 +27,12 @@ class ProyectoController extends Controller
      */
     public function create()
     {
-        //
+        $users = DB::table('users')
+        ->orderBy('name')
+        ->get();
+
+        return view('proyectos.new', ['users' => $users]);
+
     }
 
     /**
@@ -34,7 +40,26 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $proyecto = new Proyecto();
+        $proyecto -> nombre = $request->nombre;
+        $proyecto -> lider_id = $request->lider_id;
+        $proyecto -> presupuesto = $request -> presupuesto;
+        $proyecto -> presupuesto_usado = $request -> presupuesto_usado; // default 0
+        $proyecto -> estado = $request->estado; //default en progreso
+        $proyecto -> porcentaje_avance = $request->porcentaje_avance; // default 0
+        $proyecto -> presupuesto = $request -> presupuesto;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_final = $request->fecha_final;
+        $proyecto->save();
+
+        $proyectos = DB::table('projects')
+       ->join('users', 'projects.lider_id', '=', 'users.id')
+       ->select('projects.*', 'users.name as nombre_user')
+       ->get();
+
+       return view('proyectos.index', ['proyectos' => $proyectos]);
+
+
     }
 
     /**
@@ -42,7 +67,7 @@ class ProyectoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -50,7 +75,13 @@ class ProyectoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $proyecto = Proyecto::find($id);
+
+        $users = DB::table('users')
+        ->orderBy('name')
+        ->get();
+
+        return view ('proyectos.edit', ['proyecto' => $proyecto, 'users' => $users]);
     }
 
     /**
@@ -58,7 +89,25 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $proyecto = Proyecto::find($id);
+
+        $proyecto -> nombre = $request->nombre;
+        $proyecto -> lider_id = $request->lider_id;
+        $proyecto -> presupuesto = $request -> presupuesto;
+        $proyecto -> presupuesto_usado = $request -> presupuesto_usado; // default 0
+        $proyecto -> estado = $request->estado; //default en progreso
+        $proyecto -> porcentaje_avance = $request->porcentaje_avance; // default 0
+        $proyecto -> presupuesto = $request -> presupuesto;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_final = $request->fecha_final;
+        $proyecto->save();
+
+        $proyectos = DB::table('projects')
+       ->join('users', 'projects.lider_id', '=', 'users.id')
+       ->select('projects.*', 'users.name as nombre_user')
+       ->get();
+
+       return view('proyectos.index', ['proyectos' => $proyectos]);
     }
 
     /**
@@ -66,6 +115,14 @@ class ProyectoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $proyecto = Proyecto::find($id);
+        $proyecto->delete();
+
+        $proyectos = DB::table('projects')
+       ->join('users', 'projects.lider_id', '=', 'users.id')
+       ->select('projects.*', 'users.name as nombre_user')
+       ->get();
+
+       return view('proyectos.index', ['proyectos' => $proyectos]);
     }
 }
