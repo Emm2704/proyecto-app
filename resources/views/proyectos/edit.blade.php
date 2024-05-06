@@ -11,6 +11,7 @@
         <title>Editar Proyecto</title>
     </head>
     <body>
+        @if (Auth::user()->role == 'admin')
       <div class="p-5 mb-4 text-bg-dark container-fluid">
         <div class="container">
           <h1 class="display-5 fw-bold">Editar Proyecto</h1>
@@ -111,4 +112,12 @@
               </div>
           </div>
       </div>
+      @else
+    <div class="text-center">
+        <p class="mb-3">No tienes permiso para acceder a esta página.</p>
+        <div class="d-flex justify-content-center">
+            <img src="{{ asset('src/cat.jpg') }}" class="img-fluid" style="max-width: 37%;" alt="Cat Image">
+        </div>
+    </div>
+@endif
     </x-app-layout>

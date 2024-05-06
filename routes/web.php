@@ -4,6 +4,7 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\TareaController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,3 +50,12 @@ Route::get('/files/{name}', [TareaController::class, 'downloadFile'])->name('pro
 Route::resource('grupos', GrupoController::class)->parameters([
     'grupos' => 'grupo',
 ]) ->middleware(['auth', 'verified']);
+
+// user Routes
+
+Route::resource('usuarios', UserController::class)->middleware(['auth', 'verified']);
+
+Route::put('/usuarios{usuario}', [UserController::class, 'inactivar']) -> name('usuarios.inactivar');
+Route::put('/usuarios/{usuario}/activar', [UserController::class, 'activar'])->name('usuarios.activar');
+
+

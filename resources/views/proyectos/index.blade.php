@@ -14,8 +14,9 @@
     </div>
 @endif
 
-
-        <a href="{{ route('proyectos.create') }}" class="btn btn-dark" style="margin-bottom: 1%">Nuevo Proyecto</a>  
+@if (Auth::user()->role == 'admin')
+        <a href="{{ route('proyectos.create') }}" class="btn btn-dark" style="margin-bottom: 1%">Nuevo Proyecto</a>
+        @endif  
 
         <!-- Controles de filtro -->
         <div class="mb-3">
