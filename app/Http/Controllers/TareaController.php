@@ -31,7 +31,15 @@ class TareaController extends Controller
      */
     public function create()
     {
-        //
+        $users = DB::table('users')
+        ->orderBy('name')
+        ->get();
+
+        $proyectos = DB::table('projects')
+        ->orderBy('nombre')
+        ->get();
+
+        return view('tareas.new', ['users' => $users, 'proyectos' => $proyectos]);
     }
 
     /**
@@ -39,8 +47,30 @@ class TareaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validación y almacenamiento de otros campos de la tarea
+
+        $tarea = new Tarea();
+        $tarea->titulo = $request->titulo;
+        $tarea->id_encargado = $request->lider_id;
+        $tarea->id_proyecto = $request->id_proyecto;
+        $tarea->descripcion = $request->descripcion;
+        $tarea->estado = $request->estado;
+        $tarea->tipo = $request->tipo;
+        $tarea->save();
+
+        // Obtener las tareas del proyecto y devolver al índice de tareas
+        $tareas = DB::table('tasks')
+            ->join('users', 'tasks.id_encargado', '=', 'users.id')
+            ->join('projects', 'tasks.id_proyecto', '=', 'projects.id')
+            ->where('tasks.id_proyecto', '=', $request->id_proyecto)
+            ->select('tasks.*', 'users.name as nombre_user', 'projects.nombre as nombre_proyecto')
+            ->get();
+
+        return view('tareas.index', ['tareas' => $tareas]);
     }
+
+
+    
 
     /**
      * Display the specified resource.

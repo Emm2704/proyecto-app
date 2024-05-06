@@ -10,7 +10,7 @@
 
         @if (Auth::user()->name != '')
     <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <h1 style="color: #333; font-size: 24px; text-align: center;">¡Hola {{ Auth::user()->name }}!</h1>
+        <h1 style="color: #333; font-size: 24px; text-align: center;">¡Hola {{ Auth::user()->name }}, estos son los proyectos!</h1>
     </div>
 @endif
 
@@ -76,6 +76,8 @@
                         <td>{{ $proyecto->fecha_inicio }}</td>
                         <td>{{ $proyecto->fecha_final }}</td>
                         <td>
+                            <a href="{{ route('tareas.index', ['proyecto_id' => $proyecto->id]) }}" class="btn btn-primary">Ver Tareas</a>
+
                             @if (Auth::user()->role == 'admin')
                                 <a href="{{ route('proyectos.edit', ['proyecto'=>$proyecto->id]) }}" class="btn btn-secondary">Editar</a>
                                 <form action="{{ route('proyectos.destroy', ['proyecto' => $proyecto->id]) }}" method='POST' style="display:inline-block">

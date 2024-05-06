@@ -38,13 +38,13 @@
                         <div class="col-sm-10">
                           <select class="form-select" id="lider_id" name="lider_id" required>
                                <option  disabled value="">Seleccione uno...</option>
-                              @foreach ($users as $user)
-                    @if ($user ->id == $proyecto ->user_id)
-                        <option selected value="{{ $user ->id }}">{{ $user ->name }}</option>
-                    @else
-                        <option value="{{ $user ->id }}">{{ $user ->name }}</option>
-                    @endif
-                @endforeach
+                                @foreach ($users as $user)
+                                @if ($user ->id == $proyecto ->user_id)
+                                <option selected value="{{ $user ->id }}">{{ $user ->name }}</option>
+                                @else
+                                <option value="{{ $user ->id }}">{{ $user ->name }}</option>
+                                @endif
+                                @endforeach
                           </select>
                         </div>
                     </div>

@@ -13,6 +13,8 @@
             </div>
         @endif
 
+        <a href="{{ route('tareas.create') }}" class="btn btn-dark" style="margin-bottom: 1%">Nueva Tarea</a>  
+
         <!-- Controles de filtro -->
         <div class="mb-3">
             <label for="filtro-estado" class="form-label">Filtrar por estado:</label>
@@ -37,25 +39,41 @@
                         <th scope="col">Proyecto</th>
                         <th scope="col">Tipo</th>
                         <th scope="col">Estado</th>
+                        <th scope="col">Archivo</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <!-- Cuerpo de la tabla -->
                 <tbody>
                     @foreach ($tareas as $tarea)
-                        <tr class="
-                            @if ($tarea->estado == 'Detenido') detenido 
-                            @elseif ($tarea->estado == 'En progreso') en-progreso 
-                            @elseif ($tarea->estado == 'Completado') completado 
-                            @endif">
-                            <td>{{ $tarea->id }}</td>
-                            <td>{{ $tarea->titulo}}</td>
-                            <td>{{ $tarea->descripcion}}</td>
-                            <td>{{ $tarea->nombre_user }}</td>
-                            <td>{{ $tarea->nombre_proyecto }}</td>
-                            <td>{{ $tarea->tipo }}</td>
-                            <td>{{ $tarea->estado }}</td>
-                        </tr>
-                    @endforeach
+                    <tr class="
+                        @if ($tarea->estado == 'Detenido') detenido 
+                        @elseif ($tarea->estado == 'En progreso') en-progreso 
+                        @elseif ($tarea->estado == 'Completado') completado 
+                        @endif">
+                        <td>{{ $tarea->id }}</td>
+                        <td>{{ $tarea->titulo}}</td>
+                        <td>{{ $tarea->descripcion}}</td>
+                        <td>{{ $tarea->nombre_user }}</td>
+                        <td>{{ $tarea->nombre_proyecto }}</td>
+                        <td>{{ $tarea->tipo }}</td>
+                        <td>{{ $tarea->estado }}</td>
+                        <td>
+                            <a href="{{ url('storage/' . $tarea->pdf_path) }}" download="{{ basename($tarea->pdf_path) }}">
+                                <img src="https://cdn.icon-icons.com/icons2/272/PNG/512/Downloads_29996.png" alt="Icono de descarga" style="width: 30px;">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ route('tareas.edit', ['tarea'=>$tarea->id]) }}" class="btn btn-secondary">Editar</a>
+                            <form action="{{ route('tareas.destroy', $tarea->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?')">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+
                 </tbody>
             </table>
         </div>
