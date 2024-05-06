@@ -7,6 +7,7 @@
     </x-slot>
     
     <div class="container mt-5">
+        @if (Auth::user()->role == 'admin')
         @if (Auth::user()->name != '')
             <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                 <h1 style="color: #333; font-size: 24px; text-align: center;">¡Hola {{ Auth::user()->name }}, estas son los grupos!</h1>
@@ -49,4 +50,12 @@
 
     <!-- Scripts JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @else
+    <div class="text-center">
+        <p class="mb-3">No tienes permiso para acceder a esta página.</p>
+        <div class="d-flex justify-content-center">
+            <img src="{{ asset('src/cat.jpg') }}" class="img-fluid" style="max-width: 37%;" alt="Cat Image">
+        </div>
+    </div>
+@endif
 </x-app-layout>

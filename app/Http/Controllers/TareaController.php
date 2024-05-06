@@ -85,7 +85,17 @@ class TareaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $tarea = Tarea::find($id);
+
+        $users = DB::table('users')
+        ->orderBy('name')
+        ->get();
+
+        $proyectos = DB::table('projects')
+        ->orderBy('nombre')
+        ->get();
+
+        return view('tareas.edit', ['tarea'=>$tarea,'users' => $users, 'proyectos' => $proyectos]);
     }
 
     /**
@@ -93,14 +103,42 @@ class TareaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $tarea = Tarea::find($id);
+
+        $tarea->titulo = $request->titulo;
+        $tarea->id_encargado = $request->lider_id;
+        $tarea->id_proyecto = $request->id_proyecto;
+        $tarea->descripcion = $request->descripcion;
+        $tarea->estado = $request->estado;
+        $tarea->tipo = $request->tipo;
+        $tarea->save();
+
+        $tareas = DB::table('tasks')
+            ->join('users', 'tasks.id_encargado', '=', 'users.id')
+            ->join('projects', 'tasks.id_proyecto', '=', 'projects.id')
+            ->where('tasks.id_proyecto', '=', $request->id_proyecto)
+            ->select('tasks.*', 'users.name as nombre_user', 'projects.nombre as nombre_proyecto')
+            ->get();
+
+        return view('tareas.index', ['tareas' => $tareas]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+        $tarea = Tarea::findOrFail($id);
+        $tarea->delete();
+
+        // Obtener las tareas del proyecto seleccionado
+        $tareas = DB::table('tasks')
+            ->join('users', 'tasks.id_encargado', '=', 'users.id')
+            ->join('projects', 'tasks.id_proyecto', '=', 'projects.id')
+            ->where('tasks.id_proyecto', '=', $request->id_proyecto)
+            ->select('tasks.*', 'users.name as nombre_user', 'projects.nombre as nombre_proyecto')
+            ->get();
+
+        return view('tareas.index', ['tareas' => $tareas]);
     }
 }

@@ -13,7 +13,9 @@
             </div>
         @endif
 
-        <a href="{{ route('tareas.create') }}" class="btn btn-dark" style="margin-bottom: 1%">Nueva Tarea</a>  
+        @if (Auth::user()->role == 'admin')
+        <a href="{{ route('tareas.create') }}" class="btn btn-dark" style="margin-bottom: 1%">Nueva Tarea</a>
+        @endif
 
         <!-- Controles de filtro -->
         <div class="mb-3">
@@ -40,7 +42,9 @@
                         <th scope="col">Tipo</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Archivo</th>
+                        @if (Auth::user()->role == 'admin')
                         <th scope="col">Acciones</th>
+                        @endif
                     </tr>
                 </thead>
                 <!-- Cuerpo de la tabla -->
@@ -63,14 +67,17 @@
                                 <img src="https://cdn.icon-icons.com/icons2/272/PNG/512/Downloads_29996.png" alt="Icono de descarga" style="width: 30px;">
                             </a>
                         </td>
+                        @if (Auth::user()->role == 'admin')
                         <td>
                             <a href="{{ route('tareas.edit', ['tarea'=>$tarea->id]) }}" class="btn btn-secondary">Editar</a>
                             <form action="{{ route('tareas.destroy', $tarea->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
+                                <input type="hidden" name="id_proyecto" value="{{ $tarea->id_proyecto }}">
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?')">Eliminar</button>
                             </form>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
 
