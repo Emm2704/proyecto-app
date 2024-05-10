@@ -25,16 +25,6 @@
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="filtro-grupo" class="form-label">Filtrar por grupo:</label>
-                <select id="filtro-grupo" class="form-select">
-                    <option value="todos">Todos</option>
-                    @foreach ($grupos as $grupo)
-                        <option value="{{ $grupo->id }}">{{ $grupo->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-
             <!-- Tabla de proyectos -->
             <div class="table-responsive mt-4">
                 <table id="tabla-proyectos" class="table table-striped">
@@ -61,11 +51,12 @@
                                 <td>{{ $usuario->name}}</td>
                                 <td>{{ $usuario->email}}</td>
                                 <td>{{ $usuario->role }}</td>
-                                @if($usuario->id_grupo == 0)
+                                @if ($usuario->id_grupo === null)
                                     <td>Sin Grupo</td>
                                 @else
                                     <td>{{ $usuario->nombre_grupo }}</td>
                                 @endif
+
                                 <td>{{ $usuario->estado }}</td>
                                 <td>
                                     @if (Auth::user()->role == 'admin')
@@ -120,41 +111,6 @@
 
     </script>
 
-<script>
-    $(document).ready(function() {
-        $('#filtro-estado').change(function() {
-            var estado = $(this).val();
-            if (estado === 'todos') {
-                $('#tabla-proyectos tbody tr').show();
-            } else {
-                $('#tabla-proyectos tbody tr').hide();
-                $('#tabla-proyectos tbody tr.' + estado).show();
-            }
-        });
-
-        $('#filtro-estado, #filtro-grupo').change(function() {
-            var estado = $('#filtro-estado').val();
-            var grupo = $('#filtro-grupo').val();
-            $('#tabla-proyectos tbody tr').hide(); // Oculta todas las filas al principio
-
-            // Muestra las filas que coinciden con el estado seleccionado
-            if (estado === 'todos' && grupo === 'todos') {
-                $('#tabla-proyectos tbody tr').show();
-            } else {
-                $('#tabla-proyectos tbody tr.' + estado).show();
-            }
-
-            // Si se ha seleccionado un grupo, oculta las filas que no coinciden con él
-            if (grupo !== 'todos') {
-                $('#tabla-proyectos tbody tr').each(function() {
-                    if ($(this).find('td:eq(4)').text() !== grupo) {
-                        $(this).hide();
-                    }
-                });
-            }
-        });
-    });
-</script>
 
 
 
