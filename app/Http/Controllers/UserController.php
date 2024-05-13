@@ -79,15 +79,15 @@ class UserController extends Controller
         $user ->save();
 
         $usuarios = DB::table('users')
-       ->join('groups', 'users.id_grupo', '=', 'groups.id')
-       ->select('users.*', 'groups.nombre as nombre_grupo')
-       ->get();
-
-       $grupos = DB::table('groups')
-        ->orderBy('nombre')
+        ->leftJoin('groups', 'users.id_grupo', '=', 'groups.id')
+        ->select('users.*', 'groups.nombre as nombre_grupo')
         ->get();
-
-       return view('usuarios.index', ['usuarios' => $usuarios, 'grupos' => $grupos]);
+ 
+     $grupos = DB::table('groups')
+         ->orderBy('nombre')
+         ->get();
+ 
+     return view('usuarios.index', ['usuarios' => $usuarios, 'grupos' => $grupos]);
 
     }
 

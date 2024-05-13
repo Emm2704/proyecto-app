@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="titulo">titulo de la tarea:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ingrese titulo de proyecto:">
+                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ingrese titulo de tarea:">
                         </div>
                     </div>
     

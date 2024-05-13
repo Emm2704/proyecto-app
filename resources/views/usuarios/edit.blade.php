@@ -46,7 +46,7 @@
                         <label class="control-label col-sm-2" for="grupo_id">Seleccione el Grupo:</label>
                         <div class="col-sm-10">
                           <select class="form-select" id="grupo_id" name="grupo_id" required>
-                               <option  disabled value="">Seleccione uno...</option>
+                               <option  value="">Seleccione uno...</option>
                                 @foreach ($grupos as $grupo)
                                 @if ($grupo ->id == $usuario ->grupo_id)
                                 <option selected value="{{ $grupo ->id }}">{{ $grupo ->nombre }}</option>
